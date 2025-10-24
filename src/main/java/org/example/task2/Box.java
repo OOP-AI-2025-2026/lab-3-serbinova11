@@ -46,7 +46,6 @@ public class Box {
 
 
     public static void main(String[] args) {
-        // Створюємо коробку з довжиною 4.0, шириною 3.0, висотою 2.5
         Box box = new Box(4.0, 3.0, 2.5);
 
         System.out.println("Площа повної поверхні: " + box.getSurfaceArea());
