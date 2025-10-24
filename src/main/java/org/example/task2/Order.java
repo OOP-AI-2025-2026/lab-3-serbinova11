@@ -2,40 +2,55 @@ package org.example.task2;
 
 public class Order {
 
-    public long id;
-    public String customer;
+    private final long id;
+    private final String customer;
 
     public Order(long id, String customer) {
+        if (id <= 0) throw new IllegalArgumentException("ID замовлення повинен бути більшим за 0");
+        if (customer == null || customer.isBlank())
+            throw new IllegalArgumentException("Ім'я клієнта не може бути порожнім");
         this.id = id;
         this.customer = customer;
     }
 
+    public long getId() {
+        return this.id;
+    }
+
+    public String getCustomer() {
+        return this.customer;
+    }
+
     public String formOrderBill(Cart cart) {
+        if (cart == null || cart.getItemCount() == 0) {
+            return "Кошик порожній.";
+        }
 
         StringBuilder builder = new StringBuilder();
-        builder.append("Order number ").append(id).append(" for customer ").append(customer);
-        builder.append("\n------------------\n");
+        builder.append("Замовлення №").append(this.id)
+                .append(" для клієнта ").append(this.customer)
+                .append("\n------------------\n");
 
-        double sum = 0.0;
-
-        for (int i = 0; i < cart.index; i++) {
-
-            sum += cart.contents[i].price;
-
-            builder.append("Item id: ");
-            builder.append(cart.contents[i].id);
-            builder.append(" name: ");
-            builder.append(cart.contents[i].name);
-            builder.append(" price: ");
-            builder.append(cart.contents[i].price);
-            builder.append("\n");
+        double sum = 0;
+        for (Item item : cart.getItems()) {
+            sum += item.getPrice();
+            builder.append("Item id: ").append(item.getId())
+                    .append(", name: ").append(item.getName())
+                    .append(", price: ").append(item.getPrice())
+                    .append(" грн\n");
         }
 
         builder.append("------------------\n");
-        builder.append("Total sum: ");
-        builder.append(sum);
-
+        builder.append("Загальна сума: ").append(sum).append(" грн\n");
 
         return builder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + this.id +
+                ", customer='" + this.customer + '\'' +
+                '}';
     }
 }
